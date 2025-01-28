@@ -1,118 +1,79 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { NavigationContainer,  DrawerActions  } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import FontAwesome from 'react-native-vector-icons/FontAwesome6';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import HomeScreen from './HomeScreen';
+import AboutUs from './AboutUs';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+// Define types for navigation params
+type RootStackParamList = {
+  HomeStack: {
+    openQRModal?: boolean;
+    openQRScanner?: boolean;
   };
+};
 
+const Stack = createStackNavigator<RootStackParamList>();
+const Drawer = createDrawerNavigator();
+
+const StackNavigator = () => {
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Stack.Navigator
+      screenOptions={({ navigation }) => ({
+        headerStyle: { backgroundColor: 'blue' },
+        headerTitleStyle: { color: 'white' },
+        headerTintColor: 'white',
+        headerLeft: () => (
+          <TouchableOpacity
+            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+            style={{ marginHorizontal: 15 }}
+          >
+            <FontAwesome name="bars" size={24} color="white" />
+          </TouchableOpacity>
+        ),
+        headerRight: () => (
+          <View style={{ flexDirection: 'row', marginRight: 10 }}>
+            {/* QR Code Icon */}
+            <TouchableOpacity
+              onPress={() => navigation.navigate('HomeStack', { openQRModal: true })}
+              style={{ marginHorizontal: 10 }}
+            >
+              <FontAwesome name="qrcode" size={24} color="white" />
+            </TouchableOpacity>
+            {/* QR Scanner Icon */}
+            <TouchableOpacity onPress={() => navigation.navigate('HomeStack', { openQRScanner: true })}
+              style={{ marginHorizontal: 10 }}
+              >
+              <MaterialCommunityIcons name="qrcode-scan" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
+        ),
+      })}
+    >
+      <Stack.Screen name="HomeStack" component={HomeScreen} options={{ title: 'Home' }} initialParams={{ openQRModal: false, openQRScanner: false }} />
+    </Stack.Navigator>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator
+        screenOptions={{
+          drawerStyle: { backgroundColor: '#fff', width: 240 },
+          headerShown: false, // Disable default header in Drawer for custom StackNavigator header
+        }}
+      >
+        {/* Include the Stack Navigator */}
+        <Drawer.Screen name="Home" component={StackNavigator} options={{ drawerLabel: 'Home' }} />
+        {/* Add AboutUs Screen */}
+        <Drawer.Screen name="AboutUs" component={AboutUs} options={{ drawerLabel: 'About Us' }} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+};
 
 export default App;
