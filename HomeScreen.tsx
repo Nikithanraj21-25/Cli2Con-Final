@@ -54,7 +54,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ route, navigation }) => {
     const closeQRScanner = () => setShowQR(false);
   
     useEffect(() => {
-          const requestPermissions = async () => {
+          const requestContactPermissions = async () => {
             try {
               if (Platform.OS === 'android') {
                 const granted = await PermissionsAndroid.request(
@@ -70,11 +70,39 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ route, navigation }) => {
                   return;
                 }
               }
+            } catch (err) {
+              console.error(err);
+              setError('Error requesting permissions.');
+            }
+          };
+       
+          const requestCameraPermissions = async () => {
+            try {
+              if (Platform.OS === 'android') {
+                const granted = await PermissionsAndroid.request(
+                  PermissionsAndroid.PERMISSIONS.CAMERA,
+                  {
+                    title: 'CAMERA Permission',
+                    message: 'This app requires access to your camera.',
+                    buttonPositive: 'OK',
+                  }
+                );
+                if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+                  setError('Permission to access camera was denied.');
+                  return;
+                }
+              }
               fetchContactInfo();
             } catch (err) {
               console.error(err);
               setError('Error requesting permissions.');
             }
+          };
+
+          const requestPermissions = async () => {
+            await requestContactPermissions();
+            await requestCameraPermissions();
+            fetchContactInfo(); // Only fetch if both permissions are granted
           };
        
           requestPermissions();
