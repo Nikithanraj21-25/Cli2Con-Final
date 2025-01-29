@@ -23,15 +23,15 @@ const AboutUs = () => {
       <View style={styles.cardContainer}>
         {/* First Card */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Nikithan    A</Text>
+          <Text style={styles.cardTitle}>Nikithanraj A</Text>
           <Text style={styles.cardDescription}>
             App Developer
           </Text>
           <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={() => Linking.openURL("")}>
+          <TouchableOpacity onPress={() => Linking.openURL("https://www.linkedin.com/in/nikithanraj-ag/")}>
             <FontAwesome name="linkedin" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL("")}>
+          <TouchableOpacity onPress={() => Linking.openURL("https://github.com/Nikithanraj21-25")}>
             <FontAwesome name="github" size={24} color="black" style={styles.iconSpacing} />
           </TouchableOpacity>
           </View>
@@ -39,15 +39,15 @@ const AboutUs = () => {
 
         {/* Second Card */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Andrew Jeffri A</Text>
+          <Text style={styles.cardTitle}>Modugu Radha Krishna</Text>
           <Text style={styles.cardDescription}>
             App Developer
           </Text>
           <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={() => Linking.openURL("https://www.linkedin.com/in/andrew-jeffri-3ba65b224/")}>
+          <TouchableOpacity onPress={() => Linking.openURL("https://www.linkedin.com/in/radha-krishna-5047a7281/")}>
             <FontAwesome name="linkedin" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL("https://github.com/A-ANDREW-JEFFRI")}>
+          <TouchableOpacity onPress={() => Linking.openURL("https://github.com/Radhakrishna07-M")}>
             <FontAwesome name="github" size={24} color="black" style={styles.iconSpacing} />
           </TouchableOpacity>
           </View>
@@ -60,10 +60,10 @@ const AboutUs = () => {
             App Developer
           </Text> 
           <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={() => Linking.openURL("")}>
+          <TouchableOpacity onPress={() => Linking.openURL("https://www.linkedin.com/in/tejesh-pokuru-355a94227/")}>
             <FontAwesome name="linkedin" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL("")}>
+          <TouchableOpacity onPress={() => Linking.openURL("https://github.com/TEJ66")}>
             <FontAwesome name="github" size={24} color="black" style={styles.iconSpacing} />
           </TouchableOpacity>
           </View>
