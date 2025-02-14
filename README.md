@@ -88,5 +88,4 @@ Want to contribute? Follow these steps:
 - Commit your changes (git commit -m "Added a new feature")
 - Push to GitHub (git push origin feature-branch)
 - Open a Pull Request 🎉
-- 🔒 License
-This project is licensed under the MIT License.
+- 🔒 License : This project is licensed under the MIT License.
