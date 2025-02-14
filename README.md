@@ -58,7 +58,7 @@ npx react-native run-android
 3. If multiple business cards are detected → Contacts are automatically saved.
 4. If a single card is detected → The contact form opens with prefilled details for review and saving.
 
-⚡ Dependencies Used
+## ⚡ Dependencies Used
 
 react-native-qrcode-scanner -	Scans QR codes
 react-native-qrcode-svg -	Generates QR codes
@@ -69,18 +69,18 @@ react-native-image-picker - Captures images for business card scanning
 axios - Handles API requests
 react-navigation - Manages screen navigation
 
-🔐 Permissions Required
+## 🔐 Permissions Required
 
 READ_CONTACTS - Retrieves user contact details for QR Code generation
 WRITE_CONTACTS	- Saves extracted business card data to the phone
 CAMERA - Scans QR codes & business cards
 
-🛠️ API Integration
+## 🛠️ API Integration
 The app communicates with an Express.js backend to process images and extract business card details using OpenAI Vision API.
 
 Backend Repository: [[Backend Repo URL Here](https://github.com/Nikithanraj21-25/backend)]
 
-🤝 Contributing
+## 🤝 Contributing
 Want to contribute? Follow these steps:
 
 Fork the repository
