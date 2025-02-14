@@ -8,7 +8,7 @@ const AboutUs = () => {
       <Text style={styles.header}>
         About Click2Contact
         <TouchableOpacity onPress={() => Linking.openURL("https://github.com/Nikithanraj21-25/Cli2Con-Final?tab=readme-ov-file")}>
-        <FontAwesome name="external-link" size={24} color="black" style={styles.iconSpacing} />
+        <FontAwesome name="book" size={24} color="black" style={styles.iconSpacing} />
       </TouchableOpacity>
       </Text>
       <Text style={styles.subtitle}>
