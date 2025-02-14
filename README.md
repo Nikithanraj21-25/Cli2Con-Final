@@ -83,10 +83,10 @@ Backend Repository: [[Backend Repo URL Here](https://github.com/Nikithanraj21-25
 ## 🤝 Contributing
 Want to contribute? Follow these steps:
 
-Fork the repository
-Create a branch (git checkout -b feature-branch)
-Commit your changes (git commit -m "Added a new feature")
-Push to GitHub (git push origin feature-branch)
-Open a Pull Request 🎉
-🔒 License
+- Fork the repository
+- Create a branch (git checkout -b feature-branch)
+- Commit your changes (git commit -m "Added a new feature")
+- Push to GitHub (git push origin feature-branch)
+- Open a Pull Request 🎉
+- 🔒 License
 This project is licensed under the MIT License.
