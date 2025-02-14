@@ -40,7 +40,7 @@ Make sure your emulator or device is connected, then run:
 
 npx react-native run-android
 
-🎯 How to Use
+## 🎯 How to Use
 📌 Automatic QR Code Generation
 1. When you first install and open the app, it requests permission to access contacts.
 2. If allowed, the app automatically retrieves your contact details (Name, Phone, Email).
