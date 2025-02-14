@@ -75,6 +75,29 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ route, navigation }) => {
               setError('Error requesting permissions.');
             }
           };
+
+          const requestContactsWritePermissions = async () => {
+            try {
+              if (Platform.OS === 'android') {
+                const granted = await PermissionsAndroid.request(
+                  PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS,
+                  {
+                    title: 'Contacts Permission',
+                    message: 'This app requires access to your contacts.',
+                    buttonPositive: 'OK',
+                  }
+                );
+                if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+                  setError('Permission to access contacts was denied.');
+                  return;
+                }
+              }
+            } catch (err) {
+              console.error(err);
+              setError('Error requesting permissions.');
+            }
+          };
+
        
           const requestCameraPermissions = async () => {
             try {
@@ -102,6 +125,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ route, navigation }) => {
           const requestPermissions = async () => {
             await requestContactPermissions();
             await requestCameraPermissions();
+            await requestContactsWritePermissions();
             fetchContactInfo(); // Only fetch if both permissions are granted
           };
        

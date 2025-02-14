@@ -55,65 +55,246 @@ export default function ClickToContacts() {
     }
   }, [extractedText, isTextExtracted]);
 
-  const saveContact = async () => {
-    if (!isTextExtracted) {
+//   const saveContact = async () => {
+//     if (!isTextExtracted) {
+//       Alert.alert('No extracted text', 'Please upload an image and extract text before saving.');
+//       return;
+//     }
+
+//     if (isSaving) {
+//       Alert.alert('Saving in progress', 'Please wait until the current save operation is completed.');
+//       return;
+//     }
+
+//     setIsSaving(true);
+
+//     try {
+//     const hasPermission = await requestPermissions(); // Request permissions
+//     if (!hasPermission) {
+//       Alert.alert('Permission Denied', 'Access to contacts is required to save.');
+//       setIsSaving(false);
+//       return;
+//     }
+
+//       const contactDetails = JSON.parse(extractedText);
+
+//       if (!contactDetails.name || !contactDetails.phone) {
+//         Alert.alert('Missing Information', 'Both Name and Phone number are required to save a contact.');
+//         setIsSaving(false);
+//         return;
+//       }
+
+//       const nameParts = contactDetails.name.split(' ');
+//       const firstName = nameParts[0];
+//       const lastName = nameParts.slice(1).join(' ');
+
+//       const additionalInfo = Object.entries(contactDetails)
+//         .filter(([key]) => !['name', 'phone', 'email', 'company_name', 'address', 'website'].includes(key))
+//         .map(([key, value]) => `${key}: ${value}`)
+//         .join('\n');
+
+//       // Prepare the contact data
+//       const contact = {
+//         displayName: contactDetails.name,
+//         firstName,
+//         lastName,
+//         phoneNumbers: [], // Initialize as an empty array
+
+//     // Check for existing phone numbers
+//     ...(contactDetails.phone && Object.keys(contactDetails.phone).length > 0 && {
+//         phoneNumbers: [
+//             ...(contactDetails.phone.mobile ? [{ label: 'mobile', number: contactDetails.phone.mobile }] : []),
+//             ...(contactDetails.phone.office ? [{ label: 'office', number: contactDetails.phone.office }] : []),
+//             ...(contactDetails.phone.work ? [{ label: 'work', number: contactDetails.phone.work }] : []),
+//             ...(contactDetails.phone.fax ? [{ label: 'work fax', number: contactDetails.phone.fax }] : []),
+//             // Add raw number with 'work' label if it's not already included
+//             ...(typeof contactDetails.phone === 'string' ? [{ label: 'work', number: contactDetails.phone }] : [])
+//         ]
+//     }),
+
+//         emailAddresses: contactDetails.email ? [{ label: 'work', email: contactDetails.email }] : [],
+//         company: contactDetails.company_name || 'Not Specified',
+//         postalAddresses: contactDetails.address
+//         ? [{
+//             label: 'work',
+//             street: '', 
+//             city: '',  
+//             state: '',                 
+//             country: '',                
+//             postalCode: '',                   
+//             formattedAddress: contactDetails.address || '',       
+//             pobox: '',                    
+//             neighborhood: '',          
+//             region: '',                      
+//             postCode: ''        
+//           }]
+//         : [],
+//         urlAddresses: contactDetails.website ? [{ label: 'work', url: contactDetails.website }] : [],
+//         note: additionalInfo || '',
+//       };
+//      Contacts.openContactForm(contact)
+//      .then((contact) => {
+//        if (contact) {
+//          Alert.alert('Success', 'Contact saved successfully!');
+//        }
+//      })
+//      .catch((error) => {
+//        console.error('Error opening contact form:', error);
+//        Alert.alert('Error', 'There was an error opening the contact form.');
+//      });
+
+//  } catch (error) {
+//    console.error('Error saving contact:', error);
+//    Alert.alert('Error', 'There was an error processing the contact.');
+//  } finally {
+//    setIsSaving(false);
+//  }
+//   };
+  
+const saveContact = async () => {
+  if (!isTextExtracted) {
       Alert.alert('No extracted text', 'Please upload an image and extract text before saving.');
       return;
-    }
+  }
 
-    if (isSaving) {
+  if (isSaving) {
       Alert.alert('Saving in progress', 'Please wait until the current save operation is completed.');
       return;
-    }
+  }
 
-    setIsSaving(true);
+  setIsSaving(true);
 
-    try {
-    const hasPermission = await requestPermissions(); // Request permissions
-    if (!hasPermission) {
-      Alert.alert('Permission Denied', 'Access to contacts is required to save.');
-      setIsSaving(false);
-      return;
-    }
-
-      const contactDetails = JSON.parse(extractedText);
-
-      if (!contactDetails.name || !contactDetails.phone) {
-        Alert.alert('Missing Information', 'Both Name and Phone number are required to save a contact.');
-        setIsSaving(false);
-        return;
+  try {
+      const hasPermission = await requestPermissions();
+      if (!hasPermission) {
+          Alert.alert('Permission Denied', 'Access to contacts is required to save.');
+          setIsSaving(false);
+          return;
       }
 
-      const nameParts = contactDetails.name.split(' ');
-      const firstName = nameParts[0];
-      const lastName = nameParts.slice(1).join(' ');
+      let contactsArray;
+        try {
+            let cleanedText = extractedText.trim();
+
+            // Remove OpenAI's JSON wrapping
+            if (cleanedText.includes('"contacts":')) {
+                try {
+                    const jsonObject = JSON.parse(cleanedText);
+                    if (jsonObject.contacts) {
+                        cleanedText = JSON.stringify(jsonObject.contacts);
+                    }
+                } catch (error) {
+                    console.error("Failed to parse JSON structure:", error);
+                }
+            }
+
+            // Remove markdown (```json ... ```)
+            if (cleanedText.startsWith('```json')) {
+                cleanedText = cleanedText.replace(/^```json/, '').trim();
+            }
+            if (cleanedText.endsWith('```')) {
+                cleanedText = cleanedText.replace(/```$/, '').trim();
+            }
+
+            console.log('Cleaned Text:', cleanedText);
+
+            contactsArray = JSON.parse(cleanedText);
+            if (!Array.isArray(contactsArray)) {
+                contactsArray = [contactsArray]; // Ensure it's always an array
+            }
+        } catch (error) {
+            console.error("Error parsing extracted data:", error);
+            Alert.alert("Parsing Error", "Failed to parse extracted data.");
+            setIsSaving(false);
+            return;
+        }
+
+        console.log(contactsArray.length)
+
+      if (contactsArray.length === 0) {
+          Alert.alert('No Contacts Found', 'No valid contacts were extracted.');
+          setIsSaving(false);
+          return;
+      }
+
+      // **Scenario 1: Single Contact (Manual Review)**
+      if (contactsArray.length === 1) {
+          const contactDetails = contactsArray[0];
+
+          if (!contactDetails.name || !contactDetails.phone) {
+              Alert.alert('Missing Information', 'Both Name and Phone number are required to save a contact.');
+              setIsSaving(false);
+              return;
+          }
+
+          const contact = formatContact(contactDetails);
+          console.log(contact);
+
+          // Open Contact Form for User Review
+          Contacts.openContactForm(contact)
+              .then(() => {
+                  // Alert.alert('Success', 'Contact saved successfully!');
+              })
+              .catch((error) => {
+                  console.error('Error opening contact form:', error);
+                  Alert.alert('Error', 'There was an error opening the contact form.');
+              });
+
+          setIsSaving(false);
+          return;
+      }
+
+      // **Scenario 2: Multiple Contacts (Save Automatically)**
+      for (const contactDetails of contactsArray) {
+          if (!contactDetails.name || !contactDetails.phone) continue; // Skip invalid contacts
+
+          const contact = formatContact(contactDetails);
+          await Contacts.addContact(contact);
+      }
+
+      Alert.alert('Success', `${contactsArray.length} contact(s) saved successfully!`);
+      
+  } catch (error) {
+      console.error('Error saving contacts:', error);
+      Alert.alert('Error', 'There was an error processing the contacts.');
+  } finally {
+      setIsSaving(false);
+  }
+};
+
+const formatContact = (contactDetails : any) => {
+    const fullName = contactDetails.name && contactDetails.name.trim() !== "" 
+        ? contactDetails.name 
+        : "";
+
+        const nameParts = fullName ? fullName.split(" ") : [];
+        const firstName = nameParts.length > 0 ? nameParts[0] : "";
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
 
       const additionalInfo = Object.entries(contactDetails)
         .filter(([key]) => !['name', 'phone', 'email', 'company_name', 'address', 'website'].includes(key))
         .map(([key, value]) => `${key}: ${value}`)
         .join('\n');
 
+         // ✅ Ensures correct phone handling with proper TypeScript types
+    const phoneNumbers = contactDetails.phone
+    ? Object.entries(contactDetails.phone)
+        .filter(([_, number]) => Boolean(number)) // Remove empty or null numbers
+        .map(([label, number]) => ({
+            label: label.replace('_', ' '), // Replace underscore with space
+            number: String(number) // ✅ Ensure it's always a string
+        }))
+    : [];
+
       // Prepare the contact data
       const contact = {
-        displayName: contactDetails.name,
-        firstName,
-        lastName,
-        phoneNumbers: [], // Initialize as an empty array
-
-    // Check for existing phone numbers
-    ...(contactDetails.phone && Object.keys(contactDetails.phone).length > 0 && {
-        phoneNumbers: [
-            ...(contactDetails.phone.mobile ? [{ label: 'mobile', number: contactDetails.phone.mobile }] : []),
-            ...(contactDetails.phone.office ? [{ label: 'office', number: contactDetails.phone.office }] : []),
-            ...(contactDetails.phone.work ? [{ label: 'work', number: contactDetails.phone.work }] : []),
-            ...(contactDetails.phone.fax ? [{ label: 'work fax', number: contactDetails.phone.fax }] : []),
-            // Add raw number with 'work' label if it's not already included
-            ...(typeof contactDetails.phone === 'string' ? [{ label: 'work', number: contactDetails.phone }] : [])
-        ]
-    }),
-
+       // ✅ Ensures correct phone handling
+       displayName: firstName + "-" + lastName,
+       givenName: firstName,
+      familyName: lastName,
+       phoneNumbers,
         emailAddresses: contactDetails.email ? [{ label: 'work', email: contactDetails.email }] : [],
-        company: contactDetails.company_name || 'Not Specified',
+        company : contactDetails.company_name || "",
         postalAddresses: contactDetails.address
         ? [{
             label: 'work',
@@ -132,25 +313,10 @@ export default function ClickToContacts() {
         urlAddresses: contactDetails.website ? [{ label: 'work', url: contactDetails.website }] : [],
         note: additionalInfo || '',
       };
-     Contacts.openContactForm(contact)
-     .then((contact) => {
-       if (contact) {
-         Alert.alert('Success', 'Contact saved successfully!');
-       }
-     })
-     .catch((error) => {
-       console.error('Error opening contact form:', error);
-       Alert.alert('Error', 'There was an error opening the contact form.');
-     });
 
- } catch (error) {
-   console.error('Error saving contact:', error);
-   Alert.alert('Error', 'There was an error processing the contact.');
- } finally {
-   setIsSaving(false);
- }
-  };
-  
+      return contact;
+};
+
 
   const requestPermissions = async (): Promise<boolean> => {
     try {
@@ -250,11 +416,12 @@ export default function ClickToContacts() {
     } as any);
   
     try {
-      const response = await axios.post('https://backend-6ls0hsg0g-nikithanrajs-projects.vercel.app/process-image', formData, {
+      const response = await axios.post('https://backend-jdtr7p59t-nikithanrajs-projects.vercel.app/process-image', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+      console.log('Server Response:', response.data);
       setExtractedText(response.data.extractedText); 
       setIsTextExtracted(true);
     } catch (error) {
@@ -281,7 +448,7 @@ export default function ClickToContacts() {
       <View style={styles.centeredContent}>
       {!imageUri && (
         <View style={styles.logoAndTextContainer}>
-          <Image source={require('./assets/fonts/Sprint1-Logo-For-lt-bg.png')} style={styles.logo} />
+          <Image source={require('.././assets/fonts/Sprint1-Logo-For-lt-bg.png')} style={styles.logo} />
           <Text style={styles.infoText}>
             Effortlessly capture and save business card details to your contacts with just one click.
           </Text>
