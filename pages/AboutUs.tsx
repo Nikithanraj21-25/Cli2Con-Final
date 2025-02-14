@@ -56,7 +56,7 @@ const AboutUs = () => {
         {/* Third Card */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Pokuru Tejesh</Text>
-          <Text style={styles.cardDescription}>
+          <Text style={styles.cardDescription1}>
             App Developer
           </Text> 
           <View style={styles.iconContainer}>
@@ -122,6 +122,13 @@ const styles = StyleSheet.create({
     color: '#555',
     textAlign: 'center',
     marginBottom: 10,
+  },
+  cardDescription1: {
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 10,
+    marginTop: 20,
   },
   cardName: {
     fontSize: 14,
