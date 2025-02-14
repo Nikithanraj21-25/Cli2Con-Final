@@ -22,15 +22,15 @@
 ## 🚀 Installation Guide
 
 1️⃣ Clone the Repository
-git clone https://github.com/Nikithanraj21-25/Cli2Con-Final.git
-cd scannerrn
+**git clone https://github.com/Nikithanraj21-25/Cli2Con-Final.git**
+**cd scannerrn**
 
 2️⃣ Install Dependencies
-npm install
+**npm install**
 
 3️⃣ Link Dependencies (If using React Native CLI)
-For React Native versions below 0.60, run:
-react-native link
+For React Native versions below 0.60, 
+**run : react-native link**
 
 For versions 0.60+, auto-linking takes care of this.
 
