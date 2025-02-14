@@ -1,79 +1,92 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 📱 ScannerRN - QR Code Scanner & Generator
 
-# Getting Started
+**ScannerRN** is a React Native application that **automatically generates a QR Code** using the user's contact information after permission is granted. The app also supports **scanning QR codes** and **business card extraction**.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+---
 
-## Step 1: Start the Metro Server
+## ✨ Features
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+✅ **Automatic QR Code Generation**  
+   - Fetches user details from the Contacts app after permission is granted.  
+   - Generates a QR Code automatically with name, phone, email, etc.  
 
-To start Metro, run the following command from the _root_ of your React Native project:
+✅ **QR Code Scanner**  
+   - Scans QR codes and displays extracted data.  
 
-```bash
-# using npm
-npm start
+✅ **Business Card Scanner**  
+   - Multiple Cards Detected → Automatically saves all contacts.  
+   - Single Card Detected → Opens contact form with prefilled details for review.  
 
-# OR using Yarn
-yarn start
-```
+---
 
-## Step 2: Start your Application
+## 🚀 Installation Guide
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+1️⃣ Clone the Repository
+git clone https://github.com/YOUR_GITHUB_USERNAME/scannerrn.git
+cd scannerrn
 
-### For Android
+2️⃣ Install Dependencies
+npm install
 
-```bash
-# using npm
-npm run android
+3️⃣ Link Dependencies (If using React Native CLI)
+For React Native versions below 0.60, run:
+react-native link
 
-# OR using Yarn
-yarn android
-```
+For versions 0.60+, auto-linking takes care of this.
 
-### For iOS
+📲 Running the Project
+For Android
+Make sure your emulator or device is connected, then run:
 
-```bash
-# using npm
-npm run ios
+npx react-native run-android
 
-# OR using Yarn
-yarn ios
-```
+🎯 How to Use
+📌 Automatic QR Code Generation
+1. When you first install and open the app, it requests permission to access contacts.
+2. If allowed, the app automatically retrieves your contact details (Name, Phone, Email).
+3. It then generates a QR Code containing this information.
+4. You can scan this QR code to share your details instantly.
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+📌 QR Code Scanner
+1. Open the app and navigate to the QR Scanner.
+2. Point the camera at a QR code.
+3. The scanned data will be displayed in your contact form.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+📌 Business Card Scanner
+1. Take a picture of a business card.
+2. The app extracts name, phone, email, and address.
+3. If multiple business cards are detected → Contacts are automatically saved.
+4. If a single card is detected → The contact form opens with prefilled details for review and saving.
 
-## Step 3: Modifying your App
+⚡ Dependencies Used
 
-Now that you have successfully run the app, let's modify it.
+react-native-qrcode-scanner -	Scans QR codes
+react-native-qrcode-svg -	Generates QR codes
+react-native-contacts -	Fetches user contact details
+react-native-permissions -	Manages contact access permissions
+react-native-camera - Accesses the camera for scanning
+react-native-image-picker - Captures images for business card scanning
+axios - Handles API requests
+react-navigation - Manages screen navigation
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+🔐 Permissions Required
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+READ_CONTACTS - Retrieves user contact details for QR Code generation
+WRITE_CONTACTS	- Saves extracted business card data to the phone
+CAMERA - Scans QR codes & business cards
 
-## Congratulations! :tada:
+🛠️ API Integration
+The app communicates with an Express.js backend to process images and extract business card details using OpenAI Vision API.
 
-You've successfully run and modified your React Native App. :partying_face:
+Backend Repository: [[Backend Repo URL Here](https://github.com/Nikithanraj21-25/backend)]
 
-### Now what?
+🤝 Contributing
+Want to contribute? Follow these steps:
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Fork the repository
+Create a branch (git checkout -b feature-branch)
+Commit your changes (git commit -m "Added a new feature")
+Push to GitHub (git push origin feature-branch)
+Open a Pull Request 🎉
+🔒 License
+This project is licensed under the MIT License.
