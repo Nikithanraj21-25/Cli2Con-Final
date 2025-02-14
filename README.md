@@ -60,14 +60,14 @@ npx react-native run-android
 
 ## ⚡ Dependencies Used
 
--> react-native-qrcode-scanner -	Scans QR codes
--> react-native-qrcode-svg -	Generates QR codes
--> react-native-contacts -	Fetches user contact details
--> react-native-permissions -	Manages contact access permissions
--> react-native-camera - Accesses the camera for scanning
--> react-native-image-picker - Captures images for business card scanning
--> axios - Handles API requests
--> react-navigation - Manages screen navigation
+- **react-native-qrcode-scanner** - Scans QR codes
+- **react-native-qrcode-svg** - Generates QR codes
+- **react-native-contacts** - Fetches user contact details
+- **react-native-permissions** - Manages contact access permissions
+- **react-native-camera** - Accesses the camera for scanning
+- **react-native-image-picker** - Captures images for business card scanning
+- **axios** - Handles API requests
+- **react-navigation** - Manages screen navigation
 
 ## 🔐 Permissions Required
 
