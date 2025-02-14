@@ -22,7 +22,7 @@
 ## 🚀 Installation Guide
 
 1️⃣ Clone the Repository
-git clone https://github.com/YOUR_GITHUB_USERNAME/scannerrn.git
+git clone https://github.com/Nikithanraj21-25/Cli2Con-Final.git
 cd scannerrn
 
 2️⃣ Install Dependencies
