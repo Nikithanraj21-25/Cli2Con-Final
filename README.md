@@ -38,7 +38,7 @@ For versions 0.60+, auto-linking takes care of this.
 For Android
 Make sure your emulator or device is connected, then run:
 
-npx react-native run-android
+- npx react-native run-android
 
 ## 🎯 How to Use
 📌 Automatic QR Code Generation
@@ -71,9 +71,9 @@ npx react-native run-android
 
 ## 🔐 Permissions Required
 
-READ_CONTACTS - Retrieves user contact details for QR Code generation
-WRITE_CONTACTS	- Saves extracted business card data to the phone
-CAMERA - Scans QR codes & business cards
+- **READ_CONTACTS** - Retrieves user contact details for QR Code generation
+- **WRITE_CONTACTS**	- Saves extracted business card data to the phone
+- **CAMERA** - Scans QR codes & business cards
 
 ## 🛠️ API Integration
 The app communicates with an Express.js backend to process images and extract business card details using OpenAI Vision API.
