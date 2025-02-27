@@ -416,7 +416,7 @@ const formatContact = (contactDetails : any) => {
     } as any);
   
     try {
-      const response = await axios.post('https://backend-q3b3bgcyb-nikithanrajs-projects.vercel.app/process-image', formData, {
+      const response = await axios.post('https://backend-gules-six-91.vercel.app/process-image', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
