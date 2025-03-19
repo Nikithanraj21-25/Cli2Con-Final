@@ -78,7 +78,7 @@ Make sure your emulator or device is connected, then run:
 ## 🛠️ API Integration
 The app communicates with an Express.js backend to process images and extract business card details using OpenAI Vision API.
 
-Backend Repository: (https://github.com/Tej-git66/backend)
+Backend Repository: [[Backend Repo URL](https://github.com/Tej-git66/backend)]
 
 ## 🤝 Contributing
 Want to contribute? Follow these steps:
