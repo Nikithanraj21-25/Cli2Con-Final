@@ -54,102 +54,6 @@ export default function ClickToContacts() {
       setIsTextExtracted(false);
     }
   }, [extractedText, isTextExtracted]);
-
-//   const saveContact = async () => {
-//     if (!isTextExtracted) {
-//       Alert.alert('No extracted text', 'Please upload an image and extract text before saving.');
-//       return;
-//     }
-
-//     if (isSaving) {
-//       Alert.alert('Saving in progress', 'Please wait until the current save operation is completed.');
-//       return;
-//     }
-
-//     setIsSaving(true);
-
-//     try {
-//     const hasPermission = await requestPermissions(); // Request permissions
-//     if (!hasPermission) {
-//       Alert.alert('Permission Denied', 'Access to contacts is required to save.');
-//       setIsSaving(false);
-//       return;
-//     }
-
-//       const contactDetails = JSON.parse(extractedText);
-
-//       if (!contactDetails.name || !contactDetails.phone) {
-//         Alert.alert('Missing Information', 'Both Name and Phone number are required to save a contact.');
-//         setIsSaving(false);
-//         return;
-//       }
-
-//       const nameParts = contactDetails.name.split(' ');
-//       const firstName = nameParts[0];
-//       const lastName = nameParts.slice(1).join(' ');
-
-//       const additionalInfo = Object.entries(contactDetails)
-//         .filter(([key]) => !['name', 'phone', 'email', 'company_name', 'address', 'website'].includes(key))
-//         .map(([key, value]) => `${key}: ${value}`)
-//         .join('\n');
-
-//       // Prepare the contact data
-//       const contact = {
-//         displayName: contactDetails.name,
-//         firstName,
-//         lastName,
-//         phoneNumbers: [], // Initialize as an empty array
-
-//     // Check for existing phone numbers
-//     ...(contactDetails.phone && Object.keys(contactDetails.phone).length > 0 && {
-//         phoneNumbers: [
-//             ...(contactDetails.phone.mobile ? [{ label: 'mobile', number: contactDetails.phone.mobile }] : []),
-//             ...(contactDetails.phone.office ? [{ label: 'office', number: contactDetails.phone.office }] : []),
-//             ...(contactDetails.phone.work ? [{ label: 'work', number: contactDetails.phone.work }] : []),
-//             ...(contactDetails.phone.fax ? [{ label: 'work fax', number: contactDetails.phone.fax }] : []),
-//             // Add raw number with 'work' label if it's not already included
-//             ...(typeof contactDetails.phone === 'string' ? [{ label: 'work', number: contactDetails.phone }] : [])
-//         ]
-//     }),
-
-//         emailAddresses: contactDetails.email ? [{ label: 'work', email: contactDetails.email }] : [],
-//         company: contactDetails.company_name || 'Not Specified',
-//         postalAddresses: contactDetails.address
-//         ? [{
-//             label: 'work',
-//             street: '', 
-//             city: '',  
-//             state: '',                 
-//             country: '',                
-//             postalCode: '',                   
-//             formattedAddress: contactDetails.address || '',       
-//             pobox: '',                    
-//             neighborhood: '',          
-//             region: '',                      
-//             postCode: ''        
-//           }]
-//         : [],
-//         urlAddresses: contactDetails.website ? [{ label: 'work', url: contactDetails.website }] : [],
-//         note: additionalInfo || '',
-//       };
-//      Contacts.openContactForm(contact)
-//      .then((contact) => {
-//        if (contact) {
-//          Alert.alert('Success', 'Contact saved successfully!');
-//        }
-//      })
-//      .catch((error) => {
-//        console.error('Error opening contact form:', error);
-//        Alert.alert('Error', 'There was an error opening the contact form.');
-//      });
-
-//  } catch (error) {
-//    console.error('Error saving contact:', error);
-//    Alert.alert('Error', 'There was an error processing the contact.');
-//  } finally {
-//    setIsSaving(false);
-//  }
-//   };
   
 const saveContact = async () => {
   if (!isTextExtracted) {
@@ -173,43 +77,71 @@ const saveContact = async () => {
       }
 
       let contactsArray;
-        try {
-            let cleanedText = extractedText.trim();
+      try {
+          // **Ensure extractedText is not undefined**
+          if (!extractedText) {
+              console.error("Error: extractedText is undefined");
+              Alert.alert("Error", "Extracted text is missing.");
+              setIsSaving(false);
+              return;
+          }
 
-            // Remove OpenAI's JSON wrapping
-            if (cleanedText.includes('"contacts":')) {
-                try {
-                    const jsonObject = JSON.parse(cleanedText);
-                    if (jsonObject.contacts) {
-                        cleanedText = JSON.stringify(jsonObject.contacts);
-                    }
-                } catch (error) {
-                    console.error("Failed to parse JSON structure:", error);
-                }
-            }
+          let cleanedText = extractedText;
 
-            // Remove markdown (```json ... ```)
-            if (cleanedText.startsWith('```json')) {
-                cleanedText = cleanedText.replace(/^```json/, '').trim();
-            }
-            if (cleanedText.endsWith('```')) {
-                cleanedText = cleanedText.replace(/```$/, '').trim();
-            }
+          // **Check if extractedText is already an object**
+          if (typeof extractedText === "object") {
+              console.log("Extracted text is already an object, using directly.");
+          } else if (typeof extractedText === "string") {
+              cleanedText = extractedText.trim();
 
-            console.log('Cleaned Text:', cleanedText);
+              // **Remove OpenAI's JSON wrapping**
+              if (cleanedText.includes('"contacts":')) {
+                  try {
+                      const jsonObject = JSON.parse(cleanedText);
+                      if (jsonObject.contacts) {
+                          cleanedText = JSON.stringify(jsonObject.contacts);
+                      }
+                  } catch (error) {
+                      console.error("Failed to parse JSON structure:", error);
+                  }
+              }
 
-            contactsArray = JSON.parse(cleanedText);
-            if (!Array.isArray(contactsArray)) {
-                contactsArray = [contactsArray]; // Ensure it's always an array
-            }
-        } catch (error) {
-            console.error("Error parsing extracted data:", error);
-            Alert.alert("Parsing Error", "Failed to parse extracted data.");
-            setIsSaving(false);
-            return;
-        }
+              // **Remove markdown (```json ... ```)** 
+              if (cleanedText.startsWith('```json')) {
+                  cleanedText = cleanedText.replace(/^```json/, '').trim();
+              }
+              if (cleanedText.endsWith('```')) {
+                  cleanedText = cleanedText.replace(/```$/, '').trim();
+              }
 
-        console.log(contactsArray.length)
+              console.log('Cleaned Text:', cleanedText);
+
+              // **Parse JSON safely**
+              try {
+                  cleanedText = JSON.parse(cleanedText);
+              } catch (error) {
+                  console.error("Error parsing JSON:", error);
+                  Alert.alert("Parsing Error", "Failed to parse extracted data.");
+                  setIsSaving(false);
+                  return;
+              }
+          }
+
+          contactsArray = cleanedText; // Use the cleaned JSON data
+
+          // **Ensure contactsArray is always an array**
+          if (!Array.isArray(contactsArray)) {
+              contactsArray = [contactsArray];
+          }
+
+      } catch (error) {
+          console.error("Error parsing extracted data:", error);
+          Alert.alert("Parsing Error", "Failed to parse extracted data.");
+          setIsSaving(false);
+          return;
+      }
+
+      console.log("Extracted Contacts:", JSON.stringify(contactsArray, null, 2));
 
       if (contactsArray.length === 0) {
           Alert.alert('No Contacts Found', 'No valid contacts were extracted.');
@@ -217,7 +149,7 @@ const saveContact = async () => {
           return;
       }
 
-      // **Scenario 1: Single Contact (Manual Review)**
+      // **Scenario 1: Single Contact**
       if (contactsArray.length === 1) {
           const contactDetails = contactsArray[0];
 
@@ -233,7 +165,7 @@ const saveContact = async () => {
           // Open Contact Form for User Review
           Contacts.openContactForm(contact)
               .then(() => {
-                  // Alert.alert('Success', 'Contact saved successfully!');
+                  console.log("Contact saved successfully.");
               })
               .catch((error) => {
                   console.error('Error opening contact form:', error);
@@ -244,7 +176,7 @@ const saveContact = async () => {
           return;
       }
 
-      // **Scenario 2: Multiple Contacts (Save Automatically)**
+      // **Scenario 2: Multiple Contacts**
       for (const contactDetails of contactsArray) {
           if (!contactDetails.name || !contactDetails.phone) continue; // Skip invalid contacts
 
@@ -262,10 +194,11 @@ const saveContact = async () => {
   }
 };
 
+
 const formatContact = (contactDetails : any) => {
     const fullName = contactDetails.name && contactDetails.name.trim() !== "" 
         ? contactDetails.name 
-        : "";
+        : contactDetails.company_name || "";
 
         const nameParts = fullName ? fullName.split(" ") : [];
         const firstName = nameParts.length > 0 ? nameParts[0] : "";
@@ -289,9 +222,9 @@ const formatContact = (contactDetails : any) => {
       // Prepare the contact data
       const contact = {
        // ✅ Ensures correct phone handling
-       displayName: firstName + "-" + lastName,
-       givenName: firstName,
-      familyName: lastName,
+       displayName: fullName,
+       givenName: firstName,  // First name
+        familyName: lastName,  // Last name
        phoneNumbers,
         emailAddresses: contactDetails.email ? [{ label: 'work', email: contactDetails.email }] : [],
         company : contactDetails.company_name || "",
@@ -416,7 +349,7 @@ const formatContact = (contactDetails : any) => {
     } as any);
   
     try {
-      const response = await axios.post('https://backend-gules-six-91.vercel.app/process-image', formData, {
+      const response = await axios.post('https://backend-tau-amber-38.vercel.app/process-image', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
