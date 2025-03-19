@@ -22,7 +22,7 @@
 ## 🚀 Installation Guide
 
 1️⃣ Clone the Repository
-- git clone https://github.com/Nikithanraj21-25/Cli2Con-Final.git
+- git clone [🔗Frontend Repo URL](https://github.com/Nikithanraj21-25/Cli2Con-Final.git)
 - cd scannerrn
 
 2️⃣ Install Dependencies
@@ -78,7 +78,7 @@ Make sure your emulator or device is connected, then run:
 ## 🛠️ API Integration
 The app communicates with an Express.js backend to process images and extract business card details using OpenAI Vision API.
 
-Backend Repository: [Backend Repo URL](https://github.com/Tej-git66/backend)
+Backend Repository: [🔗Backend Repo URL](https://github.com/Tej-git66/backend)
 
 ## 🤝 Contributing
 Want to contribute? Follow these steps:
